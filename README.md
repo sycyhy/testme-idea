@@ -1,4 +1,7 @@
 # TestMe IJ IDEA Plugin
+
+
+`gw buildPlugin`
 [![Build Status](https://travis-ci.org/wrdv/testme-idea.svg?branch=master)](https://travis-ci.org/wrdv/testme-idea)
 [![Coverage Status](https://coveralls.io/repos/github/wrdv/testme-idea/badge.svg?branch=master)](https://coveralls.io/github/wrdv/testme-idea?branch=master)
 

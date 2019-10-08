@@ -60,26 +60,46 @@
 ##
 ##
 ################## Macros #####################
-#macro(grRenderTestSubjectInit $testedClass $hasTestableInstanceMethod $hasMocks)
-#if($hasMocks)
-    @InjectMocks
+#macro(grRenderTestSubjectInit $testedClass $hasTestableInstanceMethod $hasMocks $constructor)
+
     $testedClass.canonicalName $StringUtils.deCapitalizeFirstLetter($testedClass.name)
+
+#if($constructor)
+    #set($ctorParams = ${constructor.methodParams})
+
+#if($hasMocks)
+    def setup() {
+            $StringUtils.deCapitalizeFirstLetter($testedClass.name) = new ${testedClass.name}(#scRenderCtorParams($ctorParams))
+     }
 #elseif($hasTestableInstanceMethod)
-    $testedClass.canonicalName $StringUtils.deCapitalizeFirstLetter($testedClass.name)= $TestBuilder.renderInitType($testedClass,"$testedClass.name",$grReplacementTypes,$grDefaultTypeValues)
+    def setup() {
+            $StringUtils.deCapitalizeFirstLetter($testedClass.name) = new ${testedClass.name}()
+    }
+
+#end
+#end
+#end
+##
+#macro(scRenderCtorParams $ctorParams)
+#foreach($param in $ctorParams)
+#if($foreach.count>1), #end
+#if($MockitoMockBuilder.isMockable($param, $grDefaultTypeValues))$param.name#{else}$TestBuilder.renderInitType($param.type,"$param.name",$scReplacementTypes,$grDefaultTypeValues)#end
 #end
 #end
 ##
 #macro(grRenderMockedFields $testedClassFields)
+
 #foreach($field in $testedClassFields)
 #if($MockitoMockBuilder.isMockable($field))
-    @Mock
-    $field.type.canonicalName $field.name
+    def $field.name = Mock($field.type.canonicalName)
 #elseif($MockitoMockBuilder.isMockExpected($field))
     $MockitoMockBuilder.getImmockabiliyReason("//",$field)
 #end
 #end
 #end
 ##
+
+
 #macro(grRenderAssert $method)
 result#if($TestSubjectUtils.isJavaFuture($method.returnType)).get()#end == $TestBuilder.renderReturnParam($method,$method.returnType,"replaceMeWithExpectedResult",$grReplacementTypesForReturn,$grDefaultTypeValues)
 #end
@@ -93,6 +113,7 @@ result#if($TestSubjectUtils.isJavaFuture($method.returnType)).get()#end == $Test
 #end
 ##
 #macro(grRenderMockStubs $method $testedClassFields)
+
 #foreach($field in $testedClassFields)
 #if($MockitoMockBuilder.isMockable($field))
 #foreach($fieldMethod in $field.type.methods)

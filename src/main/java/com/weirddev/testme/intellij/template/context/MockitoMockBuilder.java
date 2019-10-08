@@ -2,9 +2,13 @@ package com.weirddev.testme.intellij.template.context;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.weirddev.testme.intellij.generator.TestBuilderUtil;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.*;
 
 /**
  * Date: 31/03/2017
@@ -62,9 +66,9 @@ public class  MockitoMockBuilder {
     /**
      * true when mock-maker-inline option is opted-in on the target test module classpath
      */
-    private boolean isMockitoMockMakerInlineOn;
-    private boolean stubMockMethodCallsReturnValues;
-    private TestSubjectInspector testSubjectInspector;
+    private final boolean isMockitoMockMakerInlineOn;
+    private final boolean stubMockMethodCallsReturnValues;
+    private final TestSubjectInspector testSubjectInspector;
 
     public MockitoMockBuilder(boolean isMockitoMockMakerInlineOn, boolean stubMockMethodCallsReturnValues, TestSubjectInspector testSubjectInspector) {
         this.isMockitoMockMakerInlineOn = isMockitoMockMakerInlineOn;
@@ -80,7 +84,7 @@ public class  MockitoMockBuilder {
     @SuppressWarnings("unused")
     public boolean isMockable(Param param, Map<String,String> defaultTypes) {
         final Type type = param.getType();
-        final boolean isMockable = !type.isPrimitive() && !TestBuilderUtil.isStringType(type.getCanonicalName()) && !isWrapperType(type) && (!type.isFinal() || isMockitoMockMakerInlineOn) && !type.isArray() && !type.isEnum() &&  defaultTypes.get(type.getCanonicalName()) == null;
+        final boolean isMockable = type.getCanonicalName() != "log" && type.getCanonicalName() != "LOGGER" && !type.isPrimitive() && !TestBuilderUtil.isStringType(type.getCanonicalName()) && !isWrapperType(type) && (!type.isFinal() || isMockitoMockMakerInlineOn) && !type.isArray() && !type.isEnum() &&  defaultTypes.get(type.getCanonicalName()) == null;
         LOG.debug("param "+ type.getCanonicalName()+" "+param.getName()+" is mockable:"+isMockable);
         return isMockable;
     }
