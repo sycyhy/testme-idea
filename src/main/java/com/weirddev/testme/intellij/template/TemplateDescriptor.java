@@ -1,7 +1,7 @@
 package com.weirddev.testme.intellij.template;
 
-import com.weirddev.testme.intellij.icon.IconTokensReplacerImpl;
 import com.weirddev.testme.intellij.common.utils.LanguageUtils;
+import com.weirddev.testme.intellij.icon.IconTokensReplacerImpl;
 import com.weirddev.testme.intellij.template.context.Language;
 
 /**
@@ -11,9 +11,9 @@ import com.weirddev.testme.intellij.template.context.Language;
  */
 public class TemplateDescriptor {
     private final Language language;
-    private String tokenizedDisplayName;
-    private String displayName;
-    private String filename;
+    private final String tokenizedDisplayName;
+    private final String displayName;
+    private final String filename;
     private String[] dependantPlugins;
 
     public TemplateDescriptor(String tokenizedDisplayName, String filename, Language language) {
@@ -45,13 +45,6 @@ public class TemplateDescriptor {
     }
 
     public boolean isEnabled() {
-        if (dependantPlugins != null) {
-            for (String pluginId : dependantPlugins) {
-                if (!LanguageUtils.isPluginEnabled(pluginId)) {
-                    return false;
-                }
-            }
-        }
         return true;
     }
 
