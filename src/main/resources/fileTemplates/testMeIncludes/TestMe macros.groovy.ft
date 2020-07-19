@@ -62,6 +62,7 @@
 ################## Macros #####################
 #macro(grRenderTestSubjectInit $testedClass $hasTestableInstanceMethod $hasMocks $constructor)
 
+    @Subject
     $testedClass.canonicalName $StringUtils.deCapitalizeFirstLetter($testedClass.name)
 
 #if($constructor)
