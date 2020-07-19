@@ -39,11 +39,6 @@ public class TemplateDescriptor {
     public String getFilename() {
         return filename;
     }
-
-    public String getTestClassFormat() {
-        return "%sTest";
-    }
-
     public boolean isEnabled() {
         return true;
     }
